@@ -109,4 +109,29 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
         }
     }
 
+    @Override
+    public ResponseEntity<String> crearEmpleado(RegistroUsuarioDTO registroRequest) {
+        personaRepository.validacionError(registroRequest);
+
+        String nombreEmpleado = generarNombreEmpleado(registroRequest.getPrimerNombre(), registroRequest.getSegundoNombre(),
+                registroRequest.getPrimerApellido());
+
+        Persona persona = new Persona(registroRequest.getPrimerNombre(), registroRequest.getSegundoNombre(),
+                registroRequest.getPrimerApellido(), registroRequest.getSegundoApellido(),
+                registroRequest.getNuip(), registroRequest.getEmail(), registroRequest.getPais());
+        personaRepository.save(persona);
+
+
+        Usuario usuario = new Usuario(nombreEmpleado,registroRequest.getPassword(), persona.getIdPerson(),
+                registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
+        try {
+            usuarioRepository.save(usuario);
+            return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
+        } catch (DataIntegrityViolationException e) {
+            personaRepository.delete(persona);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("a se encuentra el " + nombreEmpleado +" con el Rol <<ROL>> registrado en el sistema");
+        }
+    }
+
 }

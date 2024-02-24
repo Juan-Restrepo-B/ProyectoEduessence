@@ -3,7 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BACKEND/PROCESO_INICIAL/INICIAR_SESION" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BACKEND/PROCESO_INICIAL/REGISTRO_USUARIO" vcs="Git" />
   </component>
 </project>

@@ -18,4 +18,5 @@ public interface IRegistroUsuarioService {
 
         ResponseEntity<String> crearUsuario(RegistroUsuarioDTO registroRequest);
 
+        ResponseEntity<String> crearEmpleado(RegistroUsuarioDTO registroRequest);
 }
