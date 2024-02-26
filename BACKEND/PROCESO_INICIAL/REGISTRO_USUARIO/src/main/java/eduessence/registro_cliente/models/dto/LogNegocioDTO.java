@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LogNegocioDTO {
+    public String idCaseUse;
     public String acccionNegocio;
-    public String descripcionNegocio;
+    public String descripcionNeogico;
+    public String estadoAccionLog;
 }
