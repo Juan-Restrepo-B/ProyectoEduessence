@@ -83,7 +83,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             Usuario usuario = new Usuario(nombreUsuarioAlternativo, registroRequest.getPassword(), persona.getIdPerson(),
                     registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
             try {
-                usuarioRepository.save(usuario);
+                save(usuario);
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso", "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuarioAlternativo);
                 logUsuarioService.save(logUsuario);
 
@@ -107,7 +107,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             Usuario usuario = new Usuario(nombreUsuario, registroRequest.getPassword(), persona.getIdPerson(),
                     registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
             try {
-                usuarioRepository.save(usuario);
+                save(usuario);
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso", "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
                 logUsuarioService.save(logUsuario);
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
@@ -140,7 +140,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
         Usuario usuario = new Usuario(nombreEmpleado,registroRequest.getPassword(), persona.getIdPerson(),
                 registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
         try {
-            usuarioRepository.save(usuario);
+            save(usuario);
             LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
                     "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
             logUsuarioService.save(logUsuario);
