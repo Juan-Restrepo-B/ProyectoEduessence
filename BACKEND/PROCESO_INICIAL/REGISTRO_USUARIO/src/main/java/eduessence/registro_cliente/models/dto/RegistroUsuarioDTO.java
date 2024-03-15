@@ -22,6 +22,7 @@ public class RegistroUsuarioDTO {
     public String password;
     public Long idRol;
     public Long idTipoCliente;
+    public Long idUser;
 
     public RegistroUsuarioDTO(String nombreUsuario) {
         this.nombreUsuario = nombreUsuario;

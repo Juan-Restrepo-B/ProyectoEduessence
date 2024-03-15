@@ -5,6 +5,7 @@ import eduessence.registro_cliente.models.dao.IRegistroUsuarioDao;
 import eduessence.registro_cliente.models.dto.LogNegocioDTO;
 import eduessence.registro_cliente.models.dto.LogUsuarioDTO;
 import eduessence.registro_cliente.models.dto.RegistroUsuarioDTO;
+import eduessence.registro_cliente.models.dto.SesionDTO;
 import eduessence.registro_cliente.models.entity.Persona;
 import eduessence.registro_cliente.models.entity.Usuario;
 import jakarta.transaction.Transactional;
@@ -28,6 +29,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
     private  final IRegistroPersonaService personaRepository;
     private  final ILogUsuarioService logUsuarioService;
     private  final ILogNegocioService logNegocioService;
+    private  final ISesionService iSesionService;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -90,15 +92,24 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
                         "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuarioAlternativo,"EXITOSO");
                 logNegocioService.save(logNegocio);
+
+                SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreUsuarioAlternativo,
+                        "ip","INACTIVO");
+                iSesionService.save(sesion);
+
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario:  " + nombreUsuarioAlternativo);
             } catch (DataIntegrityViolationException e) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionFallido", "Error al crear el usuario. El nombre de usuario ya está en uso.");
                 logUsuarioService.save(logUsuario);
+
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
                         "Error al crear el usuario. El nombre de usuario ya está en uso.","FALLIDO");
                 logNegocioService.save(logNegocio);
+
                 personaRepository.delete(persona);
+
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Error al crear el usuario. El nombre de usuario ya está en uso.");
             }
@@ -109,15 +120,22 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             try {
                 save(usuario);
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso", "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
+
                 logUsuarioService.save(logUsuario);
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
                         "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario,"EXITOSO");
                 logNegocioService.save(logNegocio);
 
+                SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreUsuario,
+                        "ip","INACTIVO");
+                iSesionService.save(sesion);
+
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
             } catch (DataIntegrityViolationException e) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
                 personaRepository.delete(persona);
+
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Error al crear el usuario. El nombre de usuario ya está en uso.");
             }
@@ -142,6 +160,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
 
         try {
             save(usuario);
+
             LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
                     "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
             logUsuarioService.save(logUsuario);
@@ -149,14 +168,24 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             LogNegocioDTO logNegocio = new LogNegocioDTO("CU0003", "INSERT",
                     "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado,"EXITOSO");
             logNegocioService.save(logNegocio);
+
+            SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreEmpleado,
+                    "ip","INACTIVO");
+            iSesionService.save(sesion);
+
             return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
         } catch (DataIntegrityViolationException e) {
+
             LogUsuarioDTO logUsuarioFallido = new LogUsuarioDTO("creacionFallido","No se ha podido crear un nuevo empleaodo ");
             logUsuarioService.save(logUsuarioFallido);
+
             LogNegocioDTO logNegocioFallido = new LogNegocioDTO("CU0003", "INSERT", "No se ha podido crear un nuevo empleaodo ","FALLIDO");
             logNegocioService.save(logNegocioFallido);
+
             personaRepository.delete(persona);
+
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Se ha se encuentra el " + nombreEmpleado );
         }
