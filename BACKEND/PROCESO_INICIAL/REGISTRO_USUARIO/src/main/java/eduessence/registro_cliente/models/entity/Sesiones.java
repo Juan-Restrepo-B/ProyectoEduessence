@@ -25,4 +25,9 @@ public class Sesiones {
 
     @Column(name = "name_statesession")
     public String estadoS;
+
+
+    @PrePersist
+    private void prePersist(){
+    }
 }
