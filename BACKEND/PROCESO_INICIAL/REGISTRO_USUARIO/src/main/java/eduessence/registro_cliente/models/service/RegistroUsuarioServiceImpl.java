@@ -139,6 +139,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
 
         Usuario usuario = new Usuario(nombreEmpleado,registroRequest.getPassword(), persona.getIdPerson(),
                 registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
+
         try {
             save(usuario);
             LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
@@ -150,10 +151,14 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             logNegocioService.save(logNegocio);
             return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
         } catch (DataIntegrityViolationException e) {
+            LogUsuarioDTO logUsuarioFallido = new LogUsuarioDTO("creacionFallido","No se ha podido crear un nuevo empleaodo ");
+            logUsuarioService.save(logUsuarioFallido);
+            LogNegocioDTO logNegocioFallido = new LogNegocioDTO("CU0003", "INSERT", "No se ha podido crear un nuevo empleaodo ","FALLIDO");
+            logNegocioService.save(logNegocioFallido);
             personaRepository.delete(persona);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Se ha se encuentra el " + nombreEmpleado + " con el Rol <<ROL>> registrado en el sistema");
+                    .body("Se ha se encuentra el " + nombreEmpleado );
         }
     }
 

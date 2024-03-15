@@ -10,5 +10,5 @@ public interface ILogUsuarioService {
 
      LogUsuario save(LogUsuarioDTO logUsuario);
 
-    List<LogUsuario> findAll();
+     List<LogUsuario> findAll();
 }
