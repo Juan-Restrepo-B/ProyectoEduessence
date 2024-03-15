@@ -8,6 +8,7 @@ import eduessence.registro_cliente.models.dto.RegistroUsuarioDTO;
 import eduessence.registro_cliente.models.dto.SesionDTO;
 import eduessence.registro_cliente.models.entity.Persona;
 import eduessence.registro_cliente.models.entity.Usuario;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +32,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
     private  final ILogNegocioService logNegocioService;
     private  final ISesionService iSesionService;
     private final PasswordEncoder passwordEncoder;
+    private final HttpServletRequest request;
 
     @Override
     public Usuario save(Usuario usuario) {
@@ -93,8 +95,8 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                         "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuarioAlternativo,"EXITOSO");
                 logNegocioService.save(logNegocio);
 
-                SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreUsuarioAlternativo,
-                        "ip","INACTIVO");
+                String ip = request.getRemoteAddr();
+                SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuarioAlternativo, ip,"INACTIVO");
                 iSesionService.save(sesion);
 
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario:  " + nombreUsuarioAlternativo);
@@ -126,8 +128,8 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                         "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario,"EXITOSO");
                 logNegocioService.save(logNegocio);
 
-                SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreUsuario,
-                        "ip","INACTIVO");
+                String ip = request.getRemoteAddr();
+                SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuario, ip,"INACTIVO");
                 iSesionService.save(sesion);
 
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
@@ -169,8 +171,8 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                     "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado,"EXITOSO");
             logNegocioService.save(logNegocio);
 
-            SesionDTO sesion = new SesionDTO(registroRequest.idUser, nombreEmpleado,
-                    "ip","INACTIVO");
+            String ip = request.getRemoteAddr();
+            SesionDTO sesion = new SesionDTO(usuario.idUser, nombreEmpleado, ip,"INACTIVO");
             iSesionService.save(sesion);
 
             return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);

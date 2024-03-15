@@ -14,6 +14,10 @@ import lombok.Setter;
 @Table(name = "ss_session")
 public class Sesiones {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idSession")
+    public Long idSession;
+
     @Column(name = "iduser")
     public Long idUserS;
 
@@ -26,8 +30,4 @@ public class Sesiones {
     @Column(name = "name_statesession")
     public String estadoS;
 
-
-    @PrePersist
-    private void prePersist(){
-    }
 }
