@@ -18,7 +18,6 @@ import java.util.regex.Pattern;
 public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
 
     private final IRegistroPersonaDao personaRepository;
-
     @Override
     public Persona registrarPersona(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido,
                                     String nuip, String email, String pais) {
@@ -26,7 +25,6 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
                 nuip, email, pais);
         return personaRepository.save(persona);
     }
-
     @Override
     public Persona save(Persona persona) {
         if (existsByEmail(persona.getEmail())) {
@@ -34,12 +32,10 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
         }
         return personaRepository.save(persona);
     }
-
     @Override
     public void delete(Persona persona) {
         personaRepository.delete(persona);
     }
-
     @Override
     public boolean isValidEmailAddress(String email) {
         String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -54,7 +50,6 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
         }
         return true;
     }
-
     public void validacionError(RegistroUsuarioDTO registroRequest){
         if (registroRequest.getPrimerNombre().equals("") || registroRequest.getPrimerNombre() == null ) {
             throw new RequestException("P-401", "El primer Nombre es obligatorio.");
@@ -81,5 +76,4 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
     public boolean existsByEmail(String email) {
         return personaRepository.existsByEmail(email);
     }
-
 }

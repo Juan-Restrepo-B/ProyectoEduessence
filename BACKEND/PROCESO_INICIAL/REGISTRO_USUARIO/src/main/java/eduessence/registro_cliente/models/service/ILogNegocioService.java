@@ -7,8 +7,6 @@ import jakarta.transaction.Transactional;
 import java.util.List;
 @Transactional
 public interface ILogNegocioService {
-
     LogNegocio save(LogNegocioDTO logNegocio);
-
     List<LogNegocio> findAll();
 }

@@ -67,7 +67,6 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
         }
     }
 
-
     @Override
     public ResponseEntity<String> crearUsuario(RegistroUsuarioDTO registroRequest) {
         personaRepository.validacionError(registroRequest);
@@ -115,7 +114,6 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body("Error al crear el usuario. El nombre de usuario ya está en uso.");
             }
-
         } else {
             Usuario usuario = new Usuario(nombreUsuario, registroRequest.getPassword(), persona.getIdPerson(),
                     registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);

@@ -15,13 +15,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LogNegocioServiceImpl implements ILogNegocioService{
     private final ILogNegocioDao logNegocioDao;
-
     @Override
     public LogNegocio save(LogNegocioDTO logNegocio) {
         LogNegocio logEntityN = IlogNegocioMapper.INSTANCIA.dtoPersistenciaToEntity(logNegocio);
         return logNegocioDao.save(logEntityN);
     }
-
     @Override
     public List<LogNegocio> findAll() {
         return logNegocioDao.findAll();
