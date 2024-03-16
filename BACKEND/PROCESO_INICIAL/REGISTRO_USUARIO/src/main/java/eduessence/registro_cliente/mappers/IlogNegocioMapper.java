@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
-public interface IlogNegocioMapper {
+public interface IlogNegocioMapper  {
     IlogNegocioMapper INSTANCIA = Mappers.getMapper(IlogNegocioMapper.class);
     LogNegocio dtoPersistenciaToEntity(LogNegocioDTO logNegocio);
 }
