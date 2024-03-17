@@ -9,7 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-
 public class InicioSesionDTO {
     public Long idUser;
     public String nombreUsuario;
@@ -17,11 +16,15 @@ public class InicioSesionDTO {
     public Long idRol;
     public Long idTipoCliente;
     public Long idstate;
+    public String nameRol;
+    public String nametipoClioente;
+    public String estado;
 
-    public InicioSesionDTO(String nombreUsuario) {
+    public InicioSesionDTO(String nombreUsuario, String password, String  rol, String tipCliente, String estadoUsuario) {
         this.nombreUsuario = nombreUsuario;
-    }
-    public InicioSesionDTO(String password) {
         this.password = password;
+        this.nameRol = rol;
+        this.nametipoClioente = tipCliente;
+        this.estado = estadoUsuario;
     }
 }

@@ -30,4 +30,8 @@ public class Sesiones {
     @Column(name = "name_statesession")
     public String estadoS;
 
+    public Sesiones(String nombreUsuario, String estadoSesion) {
+        this.estadoS = estadoSesion;
+        this.usuarioS = nombreUsuario;
+    }
 }

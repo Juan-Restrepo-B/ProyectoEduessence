@@ -27,10 +27,10 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
 
     private final SecurityConfig configSegurity;
     private final IRegistroUsuarioDao usuarioRepository;
-    private  final IRegistroPersonaService personaRepository;
-    private  final ILogUsuarioService logUsuarioService;
-    private  final ILogNegocioService logNegocioService;
-    private  final ISesionService iSesionService;
+    private final IRegistroPersonaService personaRepository;
+    private final ILogUsuarioService logUsuarioService;
+    private final ILogNegocioService logNegocioService;
+    private final ISesionService iSesionService;
     private final PasswordEncoder passwordEncoder;
     private final HttpServletRequest request;
 
@@ -55,9 +55,11 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
     @Override
     public String generarNombreUsuario(String nombre, String apellido, String nuip) {
 
-        String nombreUsuario = nombre.substring(0, 2) + apellido.substring(0, 0) + nuip.substring(nuip.length() - 6);
+        String nombreUsuario = nombre.substring(0, 2) + apellido.substring(0, 0) +
+                nuip.substring(nuip.length() - 6);
 
-        String nombreUsuarioAlternativo = nombre.substring(0, 1) + apellido.substring(0, 1) + nuip.substring(nuip.length() - 6);
+        String nombreUsuarioAlternativo = nombre.substring(0, 1) + apellido.substring(0, 1) +
+                nuip.substring(nuip.length() - 6);
 
         List<RegistroUsuarioDTO> usuarios = consultaUsuario(nombreUsuario);
         if (usuarios != null && !usuarios.isEmpty()) {
@@ -87,26 +89,32 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                     registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
             try {
                 save(usuario);
-                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso", "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuarioAlternativo);
+                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
+                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: "
+                                + nombreUsuarioAlternativo);
                 logUsuarioService.save(logUsuario);
 
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
-                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuarioAlternativo,"EXITOSO");
+                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: "
+                                + nombreUsuarioAlternativo,"EXITOSO");
                 logNegocioService.save(logNegocio);
 
                 String ip = request.getRemoteAddr();
                 SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuarioAlternativo, ip,"INACTIVO");
                 iSesionService.save(sesion);
 
-                return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario:  " + nombreUsuarioAlternativo);
+                return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario:  "
+                        + nombreUsuarioAlternativo);
             } catch (DataIntegrityViolationException e) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
-                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionFallido", "Error al crear el usuario. El nombre de usuario ya está en uso.");
+                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionFallido",
+                        "Error al crear el usuario. El nombre de usuario ya está en uso.");
                 logUsuarioService.save(logUsuario);
 
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
-                        "Error al crear el usuario. El nombre de usuario ya está en uso.","FALLIDO");
+                        "Error al crear el usuario. El nombre de usuario ya está en uso.",
+                        "FALLIDO");
                 logNegocioService.save(logNegocio);
 
                 personaRepository.delete(persona);
@@ -119,18 +127,22 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                     registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
             try {
                 save(usuario);
-                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso", "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
+                LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
+                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: "
+                                + nombreUsuario);
 
                 logUsuarioService.save(logUsuario);
                 LogNegocioDTO logNegocio = new LogNegocioDTO("CU0002", "INSERT",
-                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario,"EXITOSO");
+                        "Usuario creado usuario exitosamente puede ingresar con el nombre de usuario: "
+                                + nombreUsuario,"EXITOSO");
                 logNegocioService.save(logNegocio);
 
                 String ip = request.getRemoteAddr();
                 SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuario, ip,"INACTIVO");
                 iSesionService.save(sesion);
 
-                return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: " + nombreUsuario);
+                return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: "
+                        + nombreUsuario);
             } catch (DataIntegrityViolationException e) {
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
@@ -162,24 +174,29 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             save(usuario);
 
             LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
-                    "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
+                    "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: "
+                            + nombreEmpleado);
             logUsuarioService.save(logUsuario);
 
             LogNegocioDTO logNegocio = new LogNegocioDTO("CU0003", "INSERT",
-                    "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado,"EXITOSO");
+                    "Usuario creado empleado exitosamente puede ingresar con el nombre de usuario: "
+                            + nombreEmpleado,"EXITOSO");
             logNegocioService.save(logNegocio);
 
             String ip = request.getRemoteAddr();
             SesionDTO sesion = new SesionDTO(usuario.idUser, nombreEmpleado, ip,"INACTIVO");
             iSesionService.save(sesion);
 
-            return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: " + nombreEmpleado);
+            return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: "
+                    + nombreEmpleado);
         } catch (DataIntegrityViolationException e) {
 
-            LogUsuarioDTO logUsuarioFallido = new LogUsuarioDTO("creacionFallido","No se ha podido crear un nuevo empleaodo ");
+            LogUsuarioDTO logUsuarioFallido = new LogUsuarioDTO("creacionFallido",
+                    "No se ha podido crear un nuevo empleaodo ");
             logUsuarioService.save(logUsuarioFallido);
 
-            LogNegocioDTO logNegocioFallido = new LogNegocioDTO("CU0003", "INSERT", "No se ha podido crear un nuevo empleaodo ","FALLIDO");
+            LogNegocioDTO logNegocioFallido = new LogNegocioDTO("CU0003", "INSERT",
+                    "No se ha podido crear un nuevo empleaodo ","FALLIDO");
             logNegocioService.save(logNegocioFallido);
 
             personaRepository.delete(persona);

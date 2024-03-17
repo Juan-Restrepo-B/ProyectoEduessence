@@ -15,4 +15,8 @@ public class SesionDTO {
     public String usuarioS;
     public String ipSession;
     public String estadoS;
+
+    public SesionDTO(String estadoS) {
+        this.estadoS = estadoS;
+    }
 }

@@ -52,10 +52,10 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
     }
     public void validacionError(RegistroUsuarioDTO registroRequest){
         if (registroRequest.getPrimerNombre().equals("") || registroRequest.getPrimerNombre() == null ) {
-            throw new RequestException("P-401", "El primer Nombre es obligatorio.");
+            throw new RequestException("P-401", "El Primer Nombre es obligatorio.");
         }
         if (registroRequest.getPrimerApellido().equals("") || registroRequest.getPrimerApellido() == null ) {
-            throw new RequestException("P-402", "El primer Apellido es obligatorio.");
+            throw new RequestException("P-402", "El Primer Apellido es obligatorio.");
         }
         if (registroRequest.getNuip().equals("") || registroRequest.getNuip() == null ) {
             throw new RequestException("P-403", "El NUIP es obligatorio.");
@@ -67,10 +67,10 @@ public class RegistroPersonaServiceImpl implements IRegistroPersonaService {
             throw new RequestException("P-405", "El Pais es obligatorio.");
         }
         if (!isValidEmailAddress(registroRequest.getEmail())) {
-            throw new BusinessException("Ingrese un Email con formato valido.","P-501");
+            throw new BusinessException("Ingrese un Email con formato valido.","P-406");
         }
         if (!isValidLongitudCampo(registroRequest.getPassword(), 6, 20)) {
-            throw new BusinessException("La longitud del campo 'Password' debe estar entre 6 y 20 caracteres.", "P-502");
+            throw new BusinessException("La longitud del campo 'Password' debe estar entre 6 y 20 caracteres.", "P-407");
         }
     }
     public boolean existsByEmail(String email) {
