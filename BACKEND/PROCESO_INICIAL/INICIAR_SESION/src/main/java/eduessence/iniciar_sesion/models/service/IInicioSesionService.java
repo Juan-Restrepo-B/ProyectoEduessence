@@ -15,4 +15,5 @@ public interface IInicioSesionService {
     List<InicioSesionDTO> consultaPassword(String passwordValidada);
     List<InicioSesionDTO> consultaEstado(String estado, String nombreUsuario);
     List<SesionDTO> consultaSesion(String estadoSesion, String nombreUsuario);
+    void actualizarSesion(String nombreUsuario, String estadoSesion, String ipSesion);
 }
