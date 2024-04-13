@@ -14,10 +14,6 @@ import lombok.Setter;
 @Table(name = "re_customer/type")
 public class TipoEmpleado {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcustomer")
-    public Long idTipoCliente;
-
     @Column(name = "name_customer")
     public String nametipoClioente;
 }
