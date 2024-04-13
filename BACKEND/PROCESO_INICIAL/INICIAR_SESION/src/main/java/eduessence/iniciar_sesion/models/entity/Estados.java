@@ -15,10 +15,7 @@ import lombok.Setter;
 public class Estados {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idstate")
-    public Long idState;
-
     @Column(name = "name_state")
     public String estado;
+
 }
