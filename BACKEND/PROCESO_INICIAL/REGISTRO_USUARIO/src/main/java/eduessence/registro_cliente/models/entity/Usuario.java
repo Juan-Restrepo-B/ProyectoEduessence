@@ -20,8 +20,8 @@ public class Usuario {
     @Column(name = "iduser")
     public Long idUser;
 
-    @Column(name = "idstate")
-    public Long idstate;
+    @Column(name = "name_state")
+    public String idstate;
 
     @Column(name = "idperson")
     public Long idPersona;
@@ -29,8 +29,8 @@ public class Usuario {
     @Column(name = "idrole")
     public Long idRol;
 
-    @Column(name = "idcustomer")
-    public Long idTipoCliente;
+    @Column(name = "name_customer")
+    public String idTipoCliente;
 
     @Column(name = "name_user", unique = true)
     public String nombreUsuario;
@@ -51,20 +51,20 @@ public class Usuario {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idcustomer", insertable = false, updatable = false)
+    @JoinColumn(name = "name_customer", insertable = false, updatable = false)
     private TipoEmpleado tipoCliente;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idstate", insertable = false, updatable = false)
+    @JoinColumn(name = "name_state", insertable = false, updatable = false)
     private Estados estadoUsuario;
 
-    public Usuario(String nombreUsuario, String password, Long idPerson, Long idTipoCliente, Long idrol, int i1) {
+    public Usuario(String nombreUsuario, String password, Long idPerson, String idTipoCliente, Long idrol, String idstate) {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.idPersona = idPerson;
         this.idRol = idrol;
         this.idTipoCliente = idTipoCliente;
-        this.idstate = 1L;
+        this.idstate = idstate;
     }
 }

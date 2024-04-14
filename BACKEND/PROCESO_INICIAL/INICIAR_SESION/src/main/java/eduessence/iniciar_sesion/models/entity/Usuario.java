@@ -58,12 +58,12 @@ public class Usuario {
     @JoinColumn(name = "name_state", insertable = false, updatable = false)
     private Estados estadoUsuario;
 
-    public Usuario(String nombreUsuario, String password, Long idPerson, Long idTipoCliente, Long idrol, int i1) {
+    public Usuario(String nombreUsuario, String password, Long idPerson, Long idTipoCliente, Long idrol, String idstate) {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.idPersona = idPerson;
         this.idRol = idrol;
         this.idTipoCliente = idTipoCliente;
-        this.idstate = 1L;
+        this.idstate = idstate;
     }
 }

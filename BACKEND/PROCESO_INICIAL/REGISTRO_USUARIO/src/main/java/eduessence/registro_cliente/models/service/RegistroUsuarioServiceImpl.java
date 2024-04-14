@@ -86,7 +86,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             String nombreUsuarioAlternativo = generarNombreUsuario(registroRequest.getPrimerNombre(),
                     registroRequest.getPrimerApellido(), registroRequest.getNuip());
             Usuario usuario = new Usuario(nombreUsuarioAlternativo, registroRequest.getPassword(), persona.getIdPerson(),
-                    registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
+                    registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), registroRequest.getIdState());
             try {
                 save(usuario);
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
@@ -124,7 +124,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             }
         } else {
             Usuario usuario = new Usuario(nombreUsuario, registroRequest.getPassword(), persona.getIdPerson(),
-                    registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
+                    registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), registroRequest.getIdState());
             try {
                 save(usuario);
                 LogUsuarioDTO logUsuario = new LogUsuarioDTO("creacionExistoso",
@@ -168,7 +168,7 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
 
 
         Usuario usuario = new Usuario(nombreEmpleado,registroRequest.getPassword(), persona.getIdPerson(),
-                registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), 1);
+                registroRequest.getIdTipoCliente(), registroRequest.getIdRol(), registroRequest.getIdState());
 
         try {
             save(usuario);
