@@ -29,7 +29,7 @@ public class Usuario {
     public Long idRol;
 
     @Column(name = "name_customer")
-    public Long idTipoCliente;
+    public String idTipoCliente;
 
     @Column(name = "name_user", unique = true)
     public String nombreUsuario;
@@ -58,7 +58,7 @@ public class Usuario {
     @JoinColumn(name = "name_state", insertable = false, updatable = false)
     private Estados estadoUsuario;
 
-    public Usuario(String nombreUsuario, String password, Long idPerson, Long idTipoCliente, Long idrol, String idstate) {
+    public Usuario(String nombreUsuario, String password, Long idPerson, String idTipoCliente, Long idrol, String idstate) {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.idPersona = idPerson;

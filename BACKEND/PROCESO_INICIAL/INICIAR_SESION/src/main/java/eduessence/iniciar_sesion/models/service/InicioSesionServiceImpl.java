@@ -10,6 +10,7 @@ import eduessence.iniciar_sesion.models.exception.RequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
     private final ILogUsuarioService logUsuarioService;
     private final ILogNegocioService logNegocioService;
     private final IInicioSesionDao inicioSesionDao;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncode;
     private final HttpServletRequest request;
     private final ISesionDao sesionDao;
 
@@ -47,7 +48,7 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
 
     @Override
     public boolean validarPassword(String passwordAlmacenada, String passwordIngresada) {
-        return passwordEncoder.matches(passwordIngresada, passwordAlmacenada);
+        return passwordEncode.matches(passwordIngresada, passwordAlmacenada);
     }
     @Override
     public List<InicioSesionDTO> consultaPassword(String passwordValidada) {
@@ -94,14 +95,14 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
 
                 throw new RequestException("P-411", "La contraseña no coincide, al tercer intento la cuenta se bloquea.");
             }
-            List<InicioSesionDTO> estado = consultaEstado(registroRequest.getEstado(), registroRequest.getNombreUsuario());
-            if (!estado.isEmpty() && "BLOQUEADO".equals(estado.get(0).getEstado())) {
+            List<InicioSesionDTO> estado = consultaEstado(registroRequest.getIdstate(), registroRequest.getNombreUsuario());
+            if (!estado.isEmpty() && "BLOQUEADO".equals(estado.get(0).getIdstate())) {
                 throw new RequestException("P-414", "El  usuario " + registroRequest.getNombreUsuario() +
                         " se encuentra en estado BLOQUEADA, ");
-            } else if (!estado.isEmpty() && "ELIMINADO".equals(estado.get(0).getEstado())) {
+            } else if (!estado.isEmpty() && "ELIMINADO".equals(estado.get(0).getIdstate())) {
                 throw new RequestException("P-415", "El usuario " + registroRequest.getNombreUsuario() +
                         " fue Eliminado.");
-            } else if (estado.isEmpty() || !"ACTIVO".equals(estado.get(0).getEstado())) {
+            } else if (estado.isEmpty() || !"ACTIVO".equals(estado.get(0).getIdstate())) {
                 throw new RequestException("P-412", "El Usuario no se encuentra en estado ACTIVO.");
             }
             List<SesionDTO> estadoSesion = consultaSesion(sesionRequest.getEstadoS(), registroRequest.getNombreUsuario());

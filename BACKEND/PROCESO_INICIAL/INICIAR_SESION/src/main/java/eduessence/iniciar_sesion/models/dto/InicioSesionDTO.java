@@ -14,17 +14,15 @@ public class InicioSesionDTO {
     public String nombreUsuario;
     public String password;
     public Long idRol;
-    public Long idTipoCliente;
-    public Long idstate;
+    public String idTipoCliente;
+    public String idstate;
     public String nameRol;
-    public String nametipoClioente;
-    public String estado;
 
     public InicioSesionDTO(String nombreUsuario, String password, String  rol, String tipCliente, String estadoUsuario) {
         this.nombreUsuario = nombreUsuario;
         this.password = password;
         this.nameRol = rol;
-        this.nametipoClioente = tipCliente;
-        this.estado = estadoUsuario;
+        this.idTipoCliente = tipCliente;
+        this.idstate = estadoUsuario;
     }
 }
