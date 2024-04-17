@@ -24,4 +24,5 @@ public class SesionServiceImpl implements ISesionService{
     public List<Sesiones> findAll() {
         return sesionDao.findAll();
     }
+
 }

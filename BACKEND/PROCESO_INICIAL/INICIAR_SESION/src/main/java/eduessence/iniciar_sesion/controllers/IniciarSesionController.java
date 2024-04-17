@@ -1,30 +1,27 @@
 package eduessence.iniciar_sesion.controllers;
 
 import eduessence.iniciar_sesion.models.dto.InicioSesionDTO;
+import eduessence.iniciar_sesion.models.dto.LoginRequest;
 import eduessence.iniciar_sesion.models.dto.SesionDTO;
+import eduessence.iniciar_sesion.models.security.AuthResponse;
 import eduessence.iniciar_sesion.models.service.IInicioSesionService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/iniciar-sesion")
+@RequestMapping("/auth")
 public class IniciarSesionController {
 
     @Autowired
     private IInicioSesionService inicioSesionService;
 
-    @PostMapping("")
-    public ResponseEntity<String> iniciarSesion(@Valid @RequestBody InicioSesionDTO registroRequest,
-                                                SesionDTO sesionRequest, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return ResponseEntity.badRequest().body("Error en la solicitud");
-        }
-        return inicioSesionService.iniciarSesion(registroRequest, sesionRequest);
+    @PostMapping("iniciar-sesion")
+    public ResponseEntity<AuthResponse> iniciarSesion(@RequestBody InicioSesionDTO registroRequest,
+                                                      SesionDTO sesionRequest, LoginRequest loginRequest) {
+        return inicioSesionService.iniciarSesion(registroRequest, sesionRequest, loginRequest);
     }
 }

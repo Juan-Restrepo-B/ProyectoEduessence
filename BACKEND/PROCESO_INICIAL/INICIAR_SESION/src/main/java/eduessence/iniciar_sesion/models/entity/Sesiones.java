@@ -1,16 +1,15 @@
 package eduessence.iniciar_sesion.models.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Data
+@Builder
 @Table(name = "ss_session")
 public class Sesiones {
     @Id

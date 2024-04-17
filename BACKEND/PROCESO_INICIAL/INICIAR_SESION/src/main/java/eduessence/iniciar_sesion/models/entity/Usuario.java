@@ -2,16 +2,15 @@ package eduessence.iniciar_sesion.models.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
+@Data
+@Builder
 @Table(name = "tr_user")
 public class Usuario {
     @Id
@@ -32,11 +31,10 @@ public class Usuario {
     public String idTipoCliente;
 
     @Column(name = "name_user", unique = true)
-    public String nombreUsuario;
+    public String username;
 
     @Column(name = "user_password")
     public String password;
-
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,8 +56,8 @@ public class Usuario {
     @JoinColumn(name = "name_state", insertable = false, updatable = false)
     private Estados estadoUsuario;
 
-    public Usuario(String nombreUsuario, String password, Long idPerson, String idTipoCliente, Long idrol, String idstate) {
-        this.nombreUsuario = nombreUsuario;
+    public Usuario(String username, String password, Long idPerson, String idTipoCliente, Long idrol, String idstate) {
+        this.username = username;
         this.password = password;
         this.idPersona = idPerson;
         this.idRol = idrol;
