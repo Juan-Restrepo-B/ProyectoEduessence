@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IInicioSesionDao extends JpaRepository<Usuario, Long> {
     @Query("SELECT NEW eduessence.iniciar_sesion.models.dto.InicioSesionDTO(u.username, u.password, " +
@@ -27,4 +28,6 @@ public interface IInicioSesionDao extends JpaRepository<Usuario, Long> {
             " ON r.idRole = u.idRol JOIN Estados e ON e.estado = u.idstate" +
             " WHERE u.username = :username")
     List<InicioSesionDTO> consultaEstado(@Param("username") String username);
+
+    Optional<Usuario> findByUsername(String username);
 }

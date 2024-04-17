@@ -43,6 +43,9 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
 
         actualizarSesion(registroRequest.getUsername(), "ACTIVO", request.getRemoteAddr());
 
+        login(loginRequest);
+
+
         return login(loginRequest);
     }
     @Override

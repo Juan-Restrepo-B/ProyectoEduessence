@@ -31,12 +31,15 @@ public class InicioSesionDTO implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority((nameRol)));
+        if (this.nameRol != null && !this.nameRol.isEmpty()) {
+            return List.of(new SimpleGrantedAuthority(this.nameRol));
+        } else {
+            return List.of();
+        }
     }
-
     @Override
     public String getUsername() {
-        return null;
+        return this.username;
     }
 
     @Override
