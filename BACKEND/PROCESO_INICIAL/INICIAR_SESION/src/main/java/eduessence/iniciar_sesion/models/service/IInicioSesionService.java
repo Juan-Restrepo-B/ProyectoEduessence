@@ -10,8 +10,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 public interface IInicioSesionService {
-    ResponseEntity<AuthResponse> iniciarSesion(InicioSesionDTO registroRequest, SesionDTO sesionRequest,
-                                         LoginRequest loginRequest);
+    ResponseEntity<AuthResponse> iniciarSesion(InicioSesionDTO registroRequest, SesionDTO sesionRequest);
     boolean validarPassword(String passwordAlmacenada, String passwordIngresada);
     ResponseEntity<String> validacionError(InicioSesionDTO registroRequest,SesionDTO sesionRequest);
     List<InicioSesionDTO> consultaUsuario(String nombreUsuario);
@@ -19,5 +18,5 @@ public interface IInicioSesionService {
     List<InicioSesionDTO> consultaEstado(String estado, String nombreUsuario);
     List<SesionDTO> consultaSesion(String estadoSesion, String nombreUsuario);
     void actualizarSesion(String nombreUsuario, String estadoSesion, String ipSesion);
-    ResponseEntity<AuthResponse> login(LoginRequest loginRequest);
+    ResponseEntity<AuthResponse> login(InicioSesionDTO registroRequest);
 }

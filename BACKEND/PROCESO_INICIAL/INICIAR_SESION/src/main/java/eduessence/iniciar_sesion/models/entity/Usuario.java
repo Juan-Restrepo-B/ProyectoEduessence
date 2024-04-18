@@ -3,6 +3,12 @@ package eduessence.iniciar_sesion.models.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,7 +18,7 @@ import lombok.*;
 @Data
 @Builder
 @Table(name = "tr_user")
-public class Usuario {
+public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iduser")
@@ -63,5 +69,48 @@ public class Usuario {
         this.idRol = idrol;
         this.idTipoCliente = idTipoCliente;
         this.idstate = idstate;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.idRol != null) {
+            String roleName = convertRoleIdToRoleName(this.idRol);
+            return List.of(new SimpleGrantedAuthority(roleName));
+        } else {
+            return List.of();
+        }
+    }
+
+    private String convertRoleIdToRoleName(Long idRol) {
+        switch(idRol.toString()) {
+            case "1": return "ROLE_ADMIN";
+            case "2": return "ROLE_USER";
+            default: return "ROLE_GUEST";
+        }
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

@@ -1,6 +1,7 @@
 package eduessence.iniciar_sesion.models.security;
 
 import eduessence.iniciar_sesion.models.dao.IInicioSesionDao;
+import eduessence.iniciar_sesion.models.dto.InicioSesionDTO;
 import eduessence.iniciar_sesion.models.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +19,7 @@ public class AuthService {
     private final IInicioSesionDao userRepositor;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthResponse loggin(LoginRequest loginRequest) {
+    public AuthResponse loggin(InicioSesionDTO loginRequest) {
         try {
             System.out.println("Attempting to authenticate user: " + loginRequest.getUsername());
             Authentication authentication = authenticationManager.authenticate(

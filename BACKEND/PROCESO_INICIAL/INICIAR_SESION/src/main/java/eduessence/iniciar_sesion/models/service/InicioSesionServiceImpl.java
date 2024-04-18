@@ -29,9 +29,9 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
     private final AuthService authService;
 
     @Override
-    public ResponseEntity<AuthResponse> iniciarSesion(InicioSesionDTO registroRequest, SesionDTO sesionRequest,
-                                                LoginRequest loginRequest) {
-        //validacionError(registroRequest, sesionRequest);
+    public ResponseEntity<AuthResponse> iniciarSesion(InicioSesionDTO registroRequest, SesionDTO sesionRequest) {
+
+        validacionError(registroRequest, sesionRequest);
 
         LogUsuarioDTO logUsuario = new LogUsuarioDTO("inicioExistoso", "Usuario " +
                 registroRequest.getUsername() + " ha iniciado Sesion Correctamente.");
@@ -41,12 +41,9 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
                 ,"EXITOSO");
         logNegocioService.save(logNegocio);
 
-        actualizarSesion(registroRequest.getUsername(), "ACTIVO", request.getRemoteAddr());
+        //actualizarSesion(registroRequest.getUsername(), "ACTIVO", request.getRemoteAddr());
 
-        login(loginRequest);
-
-
-        return login(loginRequest);
+        return login(registroRequest);
     }
     @Override
     public boolean validarPassword(String passwordAlmacenada, String passwordIngresada) {
@@ -73,17 +70,17 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
     }
     @Override
     public ResponseEntity<String> validacionError(InicioSesionDTO registroRequest, SesionDTO sesionRequest) {
-            /*if (registroRequest.getUsername() == null || registroRequest.getUsername().isEmpty()) {
+            if (registroRequest.getUsername() == null || registroRequest.getUsername().isEmpty()) {
                 throw new RequestException("P-408", "El Usuario es obligatorio.");
-            }*/
+            }
             if (registroRequest.getPassword() == null || registroRequest.getPassword().isEmpty()) {
                 throw new RequestException("P-409", "La Password es obligatoria.");
             }
             List<InicioSesionDTO> usuarios = consultaUsuario(registroRequest.getUsername());
-            /*if (usuarios.isEmpty()) {
+            if (usuarios.isEmpty()) {
                 throw new RequestException("P-410", "El usuario " + registroRequest.getUsername() +
                         " no se encuentra registrado.");
-            }*/
+            }
             String passwordAlmacenada = usuarios.get(0).getPassword();
             String passwordIngresada = registroRequest.getPassword();
             if (!validarPassword(passwordAlmacenada, passwordIngresada)) {
@@ -116,7 +113,7 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
         return ResponseEntity.ok("Inicio de Sesion Exitoso");
     }
     @Override
-    public ResponseEntity<AuthResponse> login(LoginRequest loginRequest){
-        return ResponseEntity.ok(authService.loggin(loginRequest));
+    public ResponseEntity<AuthResponse> login(InicioSesionDTO registroRequest){
+        return ResponseEntity.ok(authService.loggin(registroRequest));
     }
 }

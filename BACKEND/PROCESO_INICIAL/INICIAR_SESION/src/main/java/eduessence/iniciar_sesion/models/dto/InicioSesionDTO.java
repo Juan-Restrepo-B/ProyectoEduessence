@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class InicioSesionDTO implements UserDetails {
+public class InicioSesionDTO {
     public Long idUser;
     public String username;
     public String password;
@@ -27,38 +27,5 @@ public class InicioSesionDTO implements UserDetails {
         this.nameRol = rol;
         this.idTipoCliente = tipCliente;
         this.idstate = estadoUsuario;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (this.nameRol != null && !this.nameRol.isEmpty()) {
-            return List.of(new SimpleGrantedAuthority(this.nameRol));
-        } else {
-            return List.of();
-        }
-    }
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }
