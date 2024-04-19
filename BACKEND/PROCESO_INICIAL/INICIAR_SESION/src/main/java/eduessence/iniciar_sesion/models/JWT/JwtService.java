@@ -1,4 +1,4 @@
-package eduessence.iniciar_sesion.models.security;
+package eduessence.iniciar_sesion.models.JWT;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

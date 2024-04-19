@@ -1,4 +1,4 @@
-package eduessence.iniciar_sesion.models.security;
+package eduessence.iniciar_sesion.models.JWT;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

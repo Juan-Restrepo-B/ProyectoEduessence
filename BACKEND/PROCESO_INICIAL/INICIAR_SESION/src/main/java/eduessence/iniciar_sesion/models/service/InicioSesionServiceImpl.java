@@ -4,12 +4,11 @@ import eduessence.iniciar_sesion.models.dao.IInicioSesionDao;
 import eduessence.iniciar_sesion.models.dao.ISesionDao;
 import eduessence.iniciar_sesion.models.dto.*;
 import eduessence.iniciar_sesion.models.exception.RequestException;
-import eduessence.iniciar_sesion.models.security.AuthResponse;
-import eduessence.iniciar_sesion.models.security.AuthService;
+import eduessence.iniciar_sesion.models.JWT.AuthResponse;
+import eduessence.iniciar_sesion.models.JWT.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +40,7 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
                 ,"EXITOSO");
         logNegocioService.save(logNegocio);
 
+
         //actualizarSesion(registroRequest.getUsername(), "ACTIVO", request.getRemoteAddr());
 
         return login(registroRequest);
@@ -54,8 +54,8 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
         return inicioSesionDao.consultaPassword(passwordValidada);
     }
     @Override
-    public List<InicioSesionDTO> consultaUsuario(String nombreUsuario) {
-        return inicioSesionDao.consultaUsuario(nombreUsuario);
+    public List<InicioSesionDTO> consultaUsuario(String username) {
+        return inicioSesionDao.consultaUsuario(username);
     }
     @Override
     public List<InicioSesionDTO> consultaEstado(String estado, String nombreUsuario) {
@@ -97,12 +97,13 @@ public class InicioSesionServiceImpl implements IInicioSesionService {
             List<InicioSesionDTO> estado = consultaEstado(registroRequest.getIdstate(), registroRequest.getUsername());
             if (!estado.isEmpty() && "BLOQUEADO".equals(estado.get(0).getIdstate())) {
                 throw new RequestException("P-414", "El  usuario " + registroRequest.getUsername() +
-                        " se encuentra en estado BLOQUEADA, ");
+                        " se encuentra en estado BLOQUEADA.");
             } else if (!estado.isEmpty() && "ELIMINADO".equals(estado.get(0).getIdstate())) {
                 throw new RequestException("P-415", "El usuario " + registroRequest.getUsername() +
-                        " fue Eliminado.");
+                        " fue ELIMINADO.");
             } else if (estado.isEmpty() || !"ACTIVO".equals(estado.get(0).getIdstate())) {
-                throw new RequestException("P-412", "El Usuario no se encuentra en estado ACTIVO.");
+                throw new RequestException("P-412", "El  usuario " + registroRequest.getUsername() +
+                        " se encuentra en estado ACTIVO.");
             }
             List<SesionDTO> estadoSesion = consultaSesion(sesionRequest.getEstadoS(), registroRequest.getUsername());
             if (!estadoSesion.isEmpty() && "ACTIVO".equals(estadoSesion.get(0).getEstadoS())) {

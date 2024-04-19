@@ -1,10 +1,8 @@
 package eduessence.iniciar_sesion.models.service;
 
 import eduessence.iniciar_sesion.models.dto.InicioSesionDTO;
-import eduessence.iniciar_sesion.models.dto.LoginRequest;
 import eduessence.iniciar_sesion.models.dto.SesionDTO;
-import eduessence.iniciar_sesion.models.security.AuthResponse;
-import org.springframework.data.repository.query.Param;
+import eduessence.iniciar_sesion.models.JWT.AuthResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

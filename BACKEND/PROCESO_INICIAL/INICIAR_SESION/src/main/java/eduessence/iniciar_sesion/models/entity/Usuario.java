@@ -88,7 +88,6 @@ public class Usuario implements UserDetails {
             default: return "ROLE_GUEST";
         }
     }
-
     @Override
     public String getUsername() {
         return this.username;

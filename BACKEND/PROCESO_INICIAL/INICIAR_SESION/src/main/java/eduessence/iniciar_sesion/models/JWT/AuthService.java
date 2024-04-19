@@ -1,8 +1,7 @@
-package eduessence.iniciar_sesion.models.security;
+package eduessence.iniciar_sesion.models.JWT;
 
 import eduessence.iniciar_sesion.models.dao.IInicioSesionDao;
 import eduessence.iniciar_sesion.models.dto.InicioSesionDTO;
-import eduessence.iniciar_sesion.models.dto.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;

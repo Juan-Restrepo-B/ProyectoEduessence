@@ -1,4 +1,4 @@
-package eduessence.iniciar_sesion.models.security;
+package eduessence.iniciar_sesion.models.JWT;
 
 import org.springframework.security.core.userdetails.UserCache;
 import org.springframework.security.core.userdetails.UserDetails;

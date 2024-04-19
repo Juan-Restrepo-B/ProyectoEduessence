@@ -1,4 +1,4 @@
-package eduessence.iniciar_sesion.models.security;
+package eduessence.iniciar_sesion.models.JWT;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
