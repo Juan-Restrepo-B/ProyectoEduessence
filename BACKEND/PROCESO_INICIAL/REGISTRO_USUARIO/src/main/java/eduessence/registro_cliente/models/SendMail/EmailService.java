@@ -1,4 +1,4 @@
-package eduessence.iniciar_sesion.models.SendMail;
+package eduessence.registro_cliente.models.SendMail;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -13,11 +13,9 @@ import org.springframework.stereotype.Component;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 @Data
 @Component
 public class EmailService {
-
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
@@ -28,11 +26,11 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendSimpleEmail(String email, String token, String username, String nombreApellido) {
+    public void sendSimpleEmailUser(String email, String username, String nombreApellido) {
         MimeMessage message = javaMailSender.createMimeMessage();
 
         String formattedDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
-        String content = MessageHTML.RECUPERAR_CLAVE
+        String content = MessageHTML.CREACION_USUARIO
                 .replace("{{fecha}}", formattedDateTime)
                 .replace("((username))", username)
                 .replace("{{nombreApellido}}", nombreApellido);
@@ -41,16 +39,9 @@ public class EmailService {
 
             String displayName = "EDUESSENCE";
             String fromAddress = sender;
-            message.setSubject("Código de recuperación de cuenta EDUESSENCE");
+            message.setSubject("Bienvenido a la Familia EDUESSENCE");
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(email.trim());
-
-            int index = 0;
-            for(int i=0; i<token.length(); i++){
-                content = setCodeInTemplate(content, index, String.valueOf(token.charAt(i)));
-                index++;
-            }
-
             helper.setText(content, true);
             helper.setFrom(new InternetAddress(fromAddress, displayName));
             javaMailSender.send(message);
@@ -62,9 +53,32 @@ public class EmailService {
         }
     }
 
+    public void sendSimpleEmailEmpl(String email, String username, String password, String rol, String nombreApellido) {
+        MimeMessage message = javaMailSender.createMimeMessage();
 
-    private String setCodeInTemplate(String templateCode, int index, String number){
-        return templateCode.replace("{" + index + "}", number);
+        String formattedDateTime = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(new Date());
+        String content = MessageHTML.CREACION_EMPLEADO
+                .replace("{{fecha}}", formattedDateTime)
+                .replace("((username))", username)
+                .replace("((password))", password)
+                .replace("((rol))", rol)
+                .replace("{{nombreApellido}}", nombreApellido);
+
+        try {
+
+            String displayName = "EDUESSENCE";
+            String fromAddress = sender;
+            message.setSubject("Bienvenido a la Familia EDUESSENCE");
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(email.trim());
+            helper.setText(content, true);
+            helper.setFrom(new InternetAddress(fromAddress, displayName));
+            javaMailSender.send(message);
+
+        } catch (MessagingException ex) {
+            throw new RuntimeException("Error sending email", ex);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
-
 }

@@ -1,17 +1,17 @@
 package eduessence.registro_cliente.models.service;
 
 import eduessence.registro_cliente.controllers.SecurityConfig;
+import eduessence.registro_cliente.models.SendMail.Authenticate;
 import eduessence.registro_cliente.models.dao.IRegistroUsuarioDao;
-import eduessence.registro_cliente.models.dto.LogNegocioDTO;
-import eduessence.registro_cliente.models.dto.LogUsuarioDTO;
-import eduessence.registro_cliente.models.dto.RegistroUsuarioDTO;
-import eduessence.registro_cliente.models.dto.SesionDTO;
+import eduessence.registro_cliente.models.dao.IRolDao;
+import eduessence.registro_cliente.models.dto.*;
 import eduessence.registro_cliente.models.entity.Persona;
 import eduessence.registro_cliente.models.entity.Usuario;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,12 +27,14 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
 
     private final SecurityConfig configSegurity;
     private final IRegistroUsuarioDao usuarioRepository;
+    private final IRolDao rolDao;
     private final IRegistroPersonaService personaRepository;
     private final ILogUsuarioService logUsuarioService;
     private final ILogNegocioService logNegocioService;
     private final ISesionService iSesionService;
     private final PasswordEncoder passwordEncoder;
     private final HttpServletRequest request;
+    private final Authenticate authenticate;
 
     @Override
     public Usuario save(Usuario usuario) {
@@ -45,7 +47,14 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
     public List<RegistroUsuarioDTO> consultaUsuario(String nombreUsuario) {
         return usuarioRepository.consultaUsuario(nombreUsuario);
     }
-
+    @Override
+    public List<RolDTO> consultaRol(String role) {
+        return rolDao.consultaRol(role);
+    }
+    @Override
+    public String formatoRespuestaRol(RolDTO usuario) {
+        return String.format(usuario.getNameRol());
+    }
     @Override
     public String generarNombreEmpleado(String nombre, String nombredos, String apellido) {
         String nombreEmpleado = nombre.substring(0, 1) + nombredos.substring(0, 1) + apellido;
@@ -103,6 +112,12 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                 SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuarioAlternativo, ip,"INACTIVO");
                 iSesionService.save(sesion);
 
+                String email = registroRequest.getEmail();
+                String username = nombreUsuarioAlternativo;
+                String nombreApellido = (registroRequest.getPrimerNombre() + " " + registroRequest.getSegundoNombre()
+                        + " " + registroRequest.getPrimerApellido() + " " + registroRequest.getSegundoApellido());
+                authenticate.sendMensaggerUser(email, username, nombreApellido);
+
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario:  "
                         + nombreUsuarioAlternativo);
             } catch (DataIntegrityViolationException e) {
@@ -140,6 +155,12 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
                 String ip = request.getRemoteAddr();
                 SesionDTO sesion = new SesionDTO(usuario.idUser, nombreUsuario, ip,"INACTIVO");
                 iSesionService.save(sesion);
+
+                String email = registroRequest.getEmail();
+                String username = nombreUsuario;
+                String nombreApellido = (registroRequest.getPrimerNombre() + " " + registroRequest.getSegundoNombre()
+                        + " " + registroRequest.getPrimerApellido() + " " + registroRequest.getSegundoApellido());
+                authenticate.sendMensaggerUser(email, username, nombreApellido);
 
                 return ResponseEntity.ok("Usuario creado exitosamente puede ingresar con el nombre de usuario: "
                         + nombreUsuario);
@@ -186,6 +207,16 @@ public class RegistroUsuarioServiceImpl implements IRegistroUsuarioService {
             String ip = request.getRemoteAddr();
             SesionDTO sesion = new SesionDTO(usuario.idUser, nombreEmpleado, ip,"INACTIVO");
             iSesionService.save(sesion);
+
+            String email = registroRequest.getEmail();
+            String username = nombreEmpleado;
+            String nombreApellido = (registroRequest.getPrimerNombre() + " " + registroRequest.getSegundoNombre()
+                    + " " + registroRequest.getPrimerApellido() + " " + registroRequest.getSegundoApellido());
+            String password = registroRequest.getPassword();
+            List<RolDTO> role = consultaRol(String.valueOf(registroRequest.getIdRol()));
+            RolDTO idRol = role.get(0);
+            String rol = formatoRespuestaRol(idRol);
+            authenticate.sendMensaggerEmpl(email, username, password, rol, nombreApellido);
 
             return ResponseEntity.ok("Empleado creado exitosamente puede ingresar con el nombre de usuario: "
                     + nombreEmpleado);

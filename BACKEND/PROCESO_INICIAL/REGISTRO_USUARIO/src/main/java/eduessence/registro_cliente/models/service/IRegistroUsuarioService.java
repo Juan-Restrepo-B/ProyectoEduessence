@@ -1,7 +1,9 @@
 package eduessence.registro_cliente.models.service;
 
 import eduessence.registro_cliente.models.dto.RegistroUsuarioDTO;
+import eduessence.registro_cliente.models.dto.RolDTO;
 import eduessence.registro_cliente.models.entity.Usuario;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -13,4 +15,6 @@ public interface IRegistroUsuarioService {
         String generarNombreUsuario(String nombre, String apellido, String nuip);
         ResponseEntity<String> crearUsuario(RegistroUsuarioDTO registroRequest);
         ResponseEntity<String> crearEmpleado(RegistroUsuarioDTO registroRequest);
+        List<RolDTO> consultaRol(String role);
+        String formatoRespuestaRol(RolDTO usuario);
 }
