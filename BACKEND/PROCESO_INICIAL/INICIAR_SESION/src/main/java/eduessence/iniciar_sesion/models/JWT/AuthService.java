@@ -20,20 +20,20 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     public AuthResponse loggin(InicioSesionDTO loginRequest) {
         try {
-            System.out.println("Attempting to authenticate user: " + loginRequest.getUsername());
+            System.out.println("Intentando autenticar al usuario: " + loginRequest.getUsername());
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
             UserDetails user = (UserDetails) userRepositor.findByUsername(loginRequest.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado."));
             String token = jwtService.getToken(user);
-            System.out.println("Authentication successful for user: " + loginRequest.getUsername());
+            System.out.println("Autenticación exitosa para el usuario: " + loginRequest.getUsername());
             return AuthResponse.builder().token(token).build();
         } catch (AuthenticationException e) {
-            System.err.println("Authentication failed for user: " + loginRequest.getUsername() + " - " + e.getMessage());
-            throw new BadCredentialsException("Invalid username or password.");
+            System.err.println("Error de autenticación para el usuario: " + loginRequest.getUsername() + " - " + e.getMessage());
+            throw new BadCredentialsException("Usuario o contraseña invalido.");
         } catch (Exception e) {
-            System.err.println("Error during login process: " + e.getMessage());
+            System.err.println("Error durante el proceso de inicio de sesión: " + e.getMessage());
             throw e;
         }
     }
