@@ -49,6 +49,5 @@ public class Persona {
         this.segundoApellido = segundoApellido;
         this.nuip = nuip;
         this.email = email;
-        this.pais = pais;
     }
 }

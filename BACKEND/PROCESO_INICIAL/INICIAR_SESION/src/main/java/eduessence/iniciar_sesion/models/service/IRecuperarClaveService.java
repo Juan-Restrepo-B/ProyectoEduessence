@@ -3,6 +3,8 @@ package eduessence.iniciar_sesion.models.service;
 import eduessence.iniciar_sesion.models.Code.TokenCache;
 import eduessence.iniciar_sesion.models.dto.InicioSesionDTO;
 import eduessence.iniciar_sesion.models.dto.RecuperarClaveDTO;
+import eduessence.iniciar_sesion.models.dto.SendEmailDTO;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,4 +23,8 @@ public interface IRecuperarClaveService {
     String generateToken(String user);
     void validateToken(String token, String user);
     void actualizarClave(String user, String password);
+    String formatoRespuestaEmail(SendEmailDTO email);
+    List<SendEmailDTO> consultaEmail(String username, String nuip);
+    List<SendEmailDTO> consultaPersona(String username, String nuip);
+    String formatoRespuestaPersona(SendEmailDTO usuario);
 }

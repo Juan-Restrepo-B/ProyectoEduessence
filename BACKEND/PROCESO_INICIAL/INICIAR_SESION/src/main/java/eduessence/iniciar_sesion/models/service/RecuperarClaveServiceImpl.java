@@ -1,7 +1,9 @@
 package eduessence.iniciar_sesion.models.service;
 
 import eduessence.iniciar_sesion.models.Code.TokenCache;
+import eduessence.iniciar_sesion.models.SendMail.Authenticate;
 import eduessence.iniciar_sesion.models.dao.IRecuperarClaveDao;
+import eduessence.iniciar_sesion.models.dao.ISendMailDao;
 import eduessence.iniciar_sesion.models.dto.*;
 import eduessence.iniciar_sesion.models.exception.RequestException;
 import jakarta.transaction.Transactional;
@@ -16,19 +18,31 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecuperarClaveServiceImpl implements IRecuperarClaveService {
     private final IRecuperarClaveDao recuperarClaveDao;
+    private final ISendMailDao sendMailDao;
     private final PasswordEncoder passwordEncode;
     private final TokenCache tokenCache;
+    private final Authenticate authenticate;
     @Override
     public ResponseEntity<String> recuperarPasswordP1(RecuperarClaveDTO registroRequest) {
         validacionError(registroRequest);
 
         List<RecuperarClaveDTO> usuarios = consultaUsuario(registroRequest.getUsername(), registroRequest.getNuip());
         RecuperarClaveDTO usuarioEncontrado = usuarios.get(0);
-        String respuesta = formatoRespuestaUsuario(usuarioEncontrado);
+        String usuario = formatoRespuestaUsuario(usuarioEncontrado);
+
+        List<SendEmailDTO> emails = consultaEmail(registroRequest.getUsername(), registroRequest.getNuip());
+        SendEmailDTO emailEncontrado = emails.get(0);
+        String email = formatoRespuestaEmail(emailEncontrado);
+
+        List<SendEmailDTO> persons = consultaPersona(registroRequest.getUsername(), registroRequest.getNuip());
+        SendEmailDTO person = persons.get(0);
+        String nombreApellido = formatoRespuestaPersona(person);
 
         String token = generateToken(registroRequest.getUsername());
 
-        return ResponseEntity.ok(respuesta + " / Code: " + token);
+        authenticate.sendMensagger(email, token, usuario, nombreApellido);
+
+        return ResponseEntity.ok(usuario + " / Code: " + token);
     }
     @Override
     public ResponseEntity<String> recuperarPasswordP2(RecuperarClaveDTO registroRequest, String user) {
@@ -48,6 +62,14 @@ public class RecuperarClaveServiceImpl implements IRecuperarClaveService {
     }
 
     @Override
+    public List<SendEmailDTO> consultaEmail(String username, String nuip) {
+        return sendMailDao.consultaEmail(username, nuip);
+    }
+    @Override
+    public List<SendEmailDTO> consultaPersona(String username, String nuip) {
+        return sendMailDao.consultaEmail(username, nuip);
+    }
+    @Override
     public List<RecuperarClaveDTO> consultaUsuario(String username, String nuip) {
         return recuperarClaveDao.consultaUsuario(username, nuip);
     }
@@ -63,6 +85,15 @@ public class RecuperarClaveServiceImpl implements IRecuperarClaveService {
     public String formatoRespuestaUsuario(RecuperarClaveDTO usuario) {
         return String.format("Usuario: %s",
                 usuario.getUsername());
+    }
+    @Override
+    public String formatoRespuestaEmail(SendEmailDTO usuario) {
+        return String.format(usuario.getEmail());
+    }
+    @Override
+    public String formatoRespuestaPersona(SendEmailDTO usuario) {
+        return String.format(usuario.getPrimerNombre() + " " + usuario.getSegundoNombre() + " " +
+                usuario.getPrimerApellido() + " " + usuario.getSegundoApellido());
     }
     @Override
     public String generateToken(String user) {
