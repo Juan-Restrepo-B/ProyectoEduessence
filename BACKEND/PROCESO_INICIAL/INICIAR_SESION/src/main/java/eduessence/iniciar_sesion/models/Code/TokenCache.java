@@ -33,7 +33,7 @@ public class TokenCache {
         if (minutesElapsed >= 10) {
             cacheManager.getCache("tokens").evict(token);
             throw new TokenExpiredException("El tiempo del token ha expirado.");
-        }
+        } 1
 
         if (!tokenInfo.getUsername().equals(user)) {
             throw new TokenExpiredException("Token no válido para este usuario.");
